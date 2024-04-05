@@ -43,7 +43,7 @@ export default function ForgotPassword() {
               </p>
               <p>
                 <Link
-                  to="/login"
+                  to="/log-in"
                   className="text-blue-600 hover:text-blue-400"
                 >
                  Login
