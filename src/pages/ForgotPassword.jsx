@@ -5,9 +5,8 @@ import OAuth from "../components/OAuth";
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
 
-
   const onChange = (e) => {
-    setEmail( e.target.value);
+    setEmail(e.target.value);
   };
 
   return (
@@ -31,7 +30,7 @@ export default function ForgotPassword() {
               onChange={onChange}
               placeholder="Your Email"
             />
-           
+
             <div className=" text-sm flex justify-between">
               <p>
                 <Link
@@ -46,22 +45,22 @@ export default function ForgotPassword() {
                   to="/log-in"
                   className="text-blue-600 hover:text-blue-400"
                 >
-                 Login
+                  Login
                 </Link>
               </p>
             </div>
             <button
-            className="w-full mt-6 p-2 text-md text-white bg-red-500 hover:bg-red-600 rounded-md uppercase"
-            type="submit"
-          >
-         Reset Password
-          </button>
-       <div className="flex items-center my-3 before:border-t before:flex-1 before:border-gray-300 after:border-t after:flex-1 after:border-gray-300"><p className="text-center text-sm px-2">OR</p></div>
+              className="w-full mt-6 p-2 text-md text-white bg-red-500 hover:bg-red-600 rounded-md uppercase"
+              type="submit"
+            >
+              Reset Password
+            </button>
+            <div className="flex items-center my-3 before:border-t before:flex-1 before:border-gray-300 after:border-t after:flex-1 after:border-gray-300">
+              <p className="text-center text-sm px-2">OR</p>
+            </div>
 
-          <OAuth/>
-           
+            <OAuth />
           </form>
-         
         </div>
       </div>
     </section>
