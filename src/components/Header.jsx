@@ -45,12 +45,23 @@ const navigate = useNavigate();
             <li
               className={`py-3 text-sm font-semibold text-gray-400 border-b-[3px] border-transparent cursor-pointer
               ${
-                MatchRoute("/sign-in") && "text-stone-900 border-b-red-600"
+                MatchRoute("/log-in") && "text-stone-900 border-b-red-600"
               }`}
-              onClick={()=>navigate("/sign-in")}
+              onClick={()=>navigate("/log-in")}
             >
-              SignIn
+           Login
             </li>
+            <button className="bg-red-500 hover:bg-red-600  font-bold px-7 rounded-full">
+            <li
+              className={`py-3 text-sm font-semibold text-gray-800 border-b-[3px]  border-transparent cursor-pointer
+              ${
+                MatchRoute("/register") && "text-black"
+              }`}
+              onClick={()=>navigate("/register")}
+            >
+         Register
+            </li>
+            </button>
           </ul>
         </div>
       </header>
