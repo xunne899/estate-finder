@@ -57,7 +57,7 @@ export default function Register() {
 
   return (
     <section>
-      <h1 className="text-3xl text-center mt-6 font-bold">Register</h1>
+      <h1 className="text-3xl text-center mt-6 font-bold">Account Registeration</h1>
       <div className=" flex justify-center flex-wrap items-center px-6 py-12 max-w-6xl">
         <div className="md:w-[67%] lg:w-[50%] mb-12 md:mb-6 mx-auto">
           <img
