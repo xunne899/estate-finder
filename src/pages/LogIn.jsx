@@ -49,7 +49,7 @@ export default function LogIn() {
         <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
           <form onSubmit={onSubmit}>
             <input
-              className="w-full px-4 py-2 text-xl text-gray-300 border-2 border-gray-400 rounded transition ease-in-out mb-6"
+              className="w-full px-4 py-2 text-xl text-gray-500 border-2 border-gray-400 rounded transition ease-in-out mb-6"
               type="email"
               id="email"
               value={email}
@@ -58,7 +58,7 @@ export default function LogIn() {
             />
             <div className="relative">
               <input
-                className="w-full px-4 py-2 text-xl text-gray-300 border-2 border-gray-400 rounded transition ease-in-out"
+                className="w-full px-4 py-2 text-xl text-gray-500 border-2 border-gray-400 rounded transition ease-in-out"
                 type={showPassword ? "password" : "text"}
                 id="password"
                 value={password}
