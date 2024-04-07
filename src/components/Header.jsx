@@ -1,11 +1,20 @@
-import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React,{useState,useEffect} from "react";
+import { useLocation, useNavigate} from "react-router-dom";
+import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup } from "firebase/auth";
 
 export default function Header() {
+  const [pageState,setPageState] = useState("Login")
   const location = useLocation();
   console.log(location.pathname);
 
 const navigate = useNavigate();
+const auth = getAuth();
+
+ useEffect(()=>{
+onAuthStateChanged(auth,(user)=>{
+ user ? setPageState("Profile") : setPageState("Login")
+})
+},[auth])
 
   const MatchRoute = (route) => {
     if (route === location.pathname) {
@@ -45,11 +54,11 @@ const navigate = useNavigate();
             <li
               className={`py-3 text-sm font-semibold text-gray-400 border-b-[3px] border-transparent cursor-pointer
               ${
-                MatchRoute("/log-in") && "text-stone-900 border-b-red-600"
+                (MatchRoute("/log-in") ||  MatchRoute("/profile")) && "text-stone-900 border-b-red-600"
               }`}
-              onClick={()=>navigate("/log-in")}
+              onClick={()=>navigate("/profile")}
             >
-           Login
+           {pageState}
             </li>
             <button className="bg-red-500 hover:bg-red-600  font-bold px-7 rounded-full">
             <li
