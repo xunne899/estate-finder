@@ -20,7 +20,7 @@ export default function LogIn() {
     }));
   };
 
-  const navigate =useNavigate()
+  const navigate = useNavigate()
   async function onSubmit(e){
     e.preventDefault()
     try {
@@ -39,7 +39,7 @@ export default function LogIn() {
     <section>
       <h1 className="text-3xl text-center mt-6 font-bold">Login</h1>
       <div className=" flex justify-center flex-wrap items-center px-6 py-12 max-w-6xl">
-        <div className="md:w-[67%] lg:w-[50%] mb-12 md:mb-6 mx-auto">
+        <div className="md:w-[70%] lg:w-[51%] mb-12 md:mb-6 mx-auto">
           <img
             className="w-full rounded-2xl"
             src="https://cdn.pixabay.com/photo/2019/09/30/16/00/house-4516175_1280.jpg"

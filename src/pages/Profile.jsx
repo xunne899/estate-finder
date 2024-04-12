@@ -4,6 +4,8 @@ import { getDoc, doc,updateDoc, setDoc, serverTimestamp } from "firebase/firesto
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { db } from "../firebase";
+import { FcHome } from "react-icons/fc";
+
 
 
 export default function Profile() {
@@ -82,6 +84,10 @@ export default function Profile() {
                 </p>
             </div>
           </form>
+          <button className="flex justify-center items-center w-full p-2 text-md text-white bg-green-500 hover:bg-green-600 rounded-md uppercase" type="submit">
+          <FcHome className="mr-2 bg-transparent bg-rounded"/>Sell or rent your property
+          </button>
+
         </div>
       </section>
     </>

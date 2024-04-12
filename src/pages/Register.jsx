@@ -61,14 +61,14 @@ export default function Register() {
         Account Registration
       </h1>
       <div className=" flex justify-center flex-wrap items-center px-6 py-12 max-w-6xl">
-        <div className="md:w-[67%] lg:w-[50%] mb-12 md:mb-6 mx-auto">
+        <div className="md:w-[67%] lg:w-[50%] mb-12 md:mb-6 mx-auto flex items-center">
           <img
             className="w-full rounded-2xl"
             src="https://cdn.pixabay.com/photo/2019/09/30/16/00/house-4516175_1280.jpg"
             alt="key"
           />
         </div>
-        <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
+        <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20 mb-6">
           <form onSubmit={onSubmit}>
             <input
               className="w-full px-4 py-2 text-xl text-gray-500 border-2 border-gray-400 rounded transition ease-in-out mb-6"
