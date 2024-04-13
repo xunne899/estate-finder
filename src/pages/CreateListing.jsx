@@ -1,6 +1,23 @@
+import { addDoc, collection, serverTimestamp, set } from "firebase/firestore";
 import React, { useState } from "react";
+import Spinner from "../components/Spinner";
+import { toast } from "react-toastify";
+import { db } from "../firebase";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { getAuth } from "firebase/auth";
+import { v4 as uuidv4 } from "uuid";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateListing() {
+  const auth = getAuth();
+  const navigate = useNavigate();
+  const [geolocationEnabled, setGeolocationEnabled] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     type: "sale",
     name: "",
@@ -12,7 +29,10 @@ export default function CreateListing() {
     description: "",
     offer: true,
     regularPrice: 0,
-    discountedPrice: 0
+    discountedPrice: 0,
+    latitude: 0,
+    longitude: 0,
+    images: {},
   });
   const {
     type,
@@ -25,13 +45,147 @@ export default function CreateListing() {
     description,
     offer,
     regularPrice,
-    discountedPrice
+    discountedPrice,
+    latitude,
+    longitude,
+    images,
   } = formData;
-  function onChange() {}
+
+  const onChange = (e) => {
+    let boolean = null;
+    if (e.target.value === "true") {
+      boolean = true;
+    }
+    if (e.target.value === "false") {
+      boolean = false;
+    }
+    if (e.target.files) {
+      setFormData((prev) => ({
+        ...prev,
+        images: e.target.files,
+      }));
+    }
+    if (!e.target.files) {
+      setFormData((prev) => ({
+        ...prev,
+        [e.target.id]: boolean ?? e.target.value,
+      }));
+    }
+  };
+
+  async function onSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+    if (+discountedPrice >= +regularPrice) {
+      setLoading(false);
+      toast.error("Discounted price needs to be less than regular price");
+      return;
+    }
+    if (images.length > 6) {
+      setLoading(false);
+      toast.error("maximum of 6 images");
+      return;
+    }
+
+    let geolocation = {};
+    let location;
+    if (geolocationEnabled) {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${process.env.REACT_APP_GEOCODE_API_KEY}`
+      );
+      const data = await response.json();
+      console.log(data);
+      geolocation.lat = data.results[0]?.geometry.location.lat ?? 0;
+      geolocation.lng = data.results[0]?.geometry.location.lng ?? 0;
+
+      location = data.status === "ZERO_RESULTS" && undefined;
+
+      if (location === undefined) {
+        setLoading(false);
+        toast.error("Invalid Address.Please try again");
+        return;
+      }
+    } else {
+      geolocation.lat = latitude;
+      geolocation.lng = longitude;
+    }
+
+    async function storeImage(image) {
+      return new Promise((resolve, reject) => {
+        const storage = getStorage();
+        const filename = `${auth.currentUser.uid}-${image.name}-${uuidv4()}`;
+        const storageRef = ref(storage, filename);
+        const uploadTask = uploadBytesResumable(storageRef, image);
+
+        // Register three observers:
+        // 1. 'state_changed' observer, called any time the state changes
+        // 2. Error observer, called on failure
+        // 3. Completion observer, called on successful completion
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            // Observe state change events such as progress, pause, and resume
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("Upload is " + progress + "% done");
+            switch (snapshot.state) {
+              case "paused":
+                console.log("Upload is paused");
+                break;
+              case "running":
+                console.log("Upload is running");
+                break;
+            }
+          },
+          (error) => {
+            // Handle unsuccessful uploads
+            reject(error);
+          },
+          () => {
+            // Handle successful uploads on complete
+            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              resolve(downloadURL);
+            });
+          }
+        );
+      });
+    }
+
+    const imgUrls = await Promise.all(
+      [...images].map((image) => storeImage(image))
+    ).catch((error) => {
+      setLoading(false);
+      toast.error("Images not uploaded");
+      return;
+    });
+
+    const formDataCopy = {
+      ...formData,
+      imgUrls,
+      geolocation,
+      timestamp: serverTimestamp(),
+    };
+    delete formDataCopy.images;
+    !formDataCopy.offer && delete formDataCopy.discountedPrice;
+    delete formDataCopy.latitude;
+    delete formDataCopy.longitude;
+    const docRef = await addDoc(collection(db, "listings"), formDataCopy);
+    setLoading(false);
+    toast.success("Listing Created");
+    navigate(
+      `/category/${formDataCopy.type}/${formDataCopy.type}/${docRef.id}`
+    );
+  }
+
+  if (loading) {
+    return <Spinner />;
+  }
   return (
     <main className="max-w-md px-2 mx-auto">
       <h1 className="text-3xl text-center mt-6 font-bold">Create Listing</h1>
-      <form>
+      <form onSubmit={onSubmit}>
         <p className="text-lg mt-6 font-semibold">Sell/Rent</p>
         <div className="flex">
           <button
@@ -50,7 +204,7 @@ export default function CreateListing() {
           <button
             type="button"
             id="type"
-            value="sale"
+            value="rent"
             onClick={onChange}
             className={`ml-3 px-7 py-3 font-medium test-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg w-full ${
               type === "sale"
@@ -165,7 +319,37 @@ export default function CreateListing() {
           required
           className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded focus:bg-white focus:border-slate-600 mb-6 resize"
         />
+        {!geolocationEnabled && (
+          <div className="flex space-x-6 justify-start mb-6">
+            <div>
+              <p className="text-lg font-semibold">Latitude</p>
+              <input
+                type="number"
+                id="latitude"
+                value={latitude}
+                onChange={onChange}
+                required
+                min="-90"
+                max="90"
+                className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 focus:bg-white focus:text-gray-700 focus:border-slate-600 text-center rounded"
+              />
+            </div>
 
+            <div>
+              <p className="text-lg font-semibold">Longitude</p>
+              <input
+                type="number"
+                id="longitude"
+                value={longitude}
+                onChange={onChange}
+                required
+                min="-180"
+                max="180"
+                className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 focus:bg-white focus:text-gray-700 focus:border-slate-600 text-center rounded"
+              />
+            </div>
+          </div>
+        )}
         <p className="text-lg font-semibold">Description</p>
         <textarea
           type="text"
@@ -197,7 +381,7 @@ export default function CreateListing() {
             value={false}
             onClick={onChange}
             className={`ml-3 px-7 py-3 font-medium test-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg w-full ${
-              furnished ? "bg-white text-black" : "bg-slate-600 text-white"
+              offer ? "bg-white text-black" : "bg-slate-600 text-white"
             }`}
           >
             No
@@ -218,48 +402,61 @@ export default function CreateListing() {
                 required
                 className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded"
               />
-                  {type === "rent" && (
-              <div>
-                <p className="text-md w-full whitespace-nowrap">$/ Month</p>
-              </div>
-            )}
+              {type === "rent" && (
+                <div>
+                  <p className="text-md w-full whitespace-nowrap">$/ Month</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-             {/*  */}
-           {offer && (
-             <div className="flex items-center mb-6">
-          <div className="">
-            <p className="text-lg font-semibold">Discounted Price</p>
-            <div className="flex w-full justify-center items-center">
-              <input
-                type="number"
-                id="discountedPrice"
-                value={discountedPrice}
-                onChange={onChange}
-                min="50"
-                max="4000000"
-                required={offer}
-                className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded"
-              />
-                  {type === "rent" && (
-              <div>
-                <p className="text-md w-full whitespace-nowrap">$/ Month</p>
+        {/*  */}
+        {offer && (
+          <div className="flex items-center mb-6">
+            <div className="">
+              <p className="text-lg font-semibold">Discounted Price</p>
+              <div className="flex w-full justify-center items-center">
+                <input
+                  type="number"
+                  id="discountedPrice"
+                  value={discountedPrice}
+                  onChange={onChange}
+                  min="50"
+                  max="4000000"
+                  required={offer}
+                  className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded"
+                />
+                {type === "rent" && (
+                  <div>
+                    <p className="text-md w-full whitespace-nowrap">$/ Month</p>
+                  </div>
+                )}
               </div>
-            )}
             </div>
           </div>
+        )}
+        <div className="mb-6">
+          <p className="text-lg font-semibold">Images</p>
+          <p className="text-gray-600">
+            The first image will be the cover(max 6)
+          </p>
+          <input
+            type="file"
+            id="images"
+            onChange={onChange}
+            accept=".jpg,.png,.jpeg"
+            multiple
+            required
+            className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded focus:bg-white focus:border-slate-600"
+          />
         </div>
-             )}
-             <div className="mb-6">
-              <p className="text-lg font-semibold">
-                  Images
-              </p>
-             <p className="text-gray-600">The first image will be the cover(max 6)</p>
-             <input type="file" id="images" onChange={onChange} accept=".jpg,.png,.jpeg" multiple required className="w-full px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded focus:bg-white focus:border-slate-600"/>
-             </div>
-             <button type="submit" className="mb-6 w-full px-7 py-3 bg-blue-600 text-white font-medium text-sm uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg active:bg-blue-800 active:shadow-lg">Create Listing</button>
+        <button
+          type="submit"
+          className="mb-6 w-full px-7 py-3 bg-blue-600 text-white font-medium text-sm uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg active:bg-blue-800 active:shadow-lg"
+        >
+          Create Listing
+        </button>
       </form>
     </main>
   );

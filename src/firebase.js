@@ -6,7 +6,7 @@ import { getFirestore } from "firebase/firestore"
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDE3_Jx396-QRa-DPR3wl2vig1PcJZSZIE",
+    apiKey: "AIzaSyDtWR4KXPXVz9ZuAxHFZ1sPzqVXrdJCKQQ",
     authDomain: "property-finder-react.firebaseapp.com",
     projectId: "property-finder-react",
     storageBucket: "property-finder-react.appspot.com",
