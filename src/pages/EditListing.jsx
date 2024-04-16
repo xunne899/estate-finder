@@ -1,4 +1,12 @@
-import { addDoc, collection, doc, getDoc, serverTimestamp, set, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  serverTimestamp,
+  set,
+  updateDoc,
+} from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import Spinner from "../components/Spinner";
 import { toast } from "react-toastify";
@@ -52,33 +60,31 @@ export default function EditListing() {
     images,
   } = formData;
 
-  const params = useParams()
+  const params = useParams();
 
-  useEffect(()=>{
-    if(listing && listing.userRef !==auth.currentUser.uid){
-        toast.error("Unable to edit listing")
-        navigate("/")
+  useEffect(() => {
+    if (listing && listing.userRef !== auth.currentUser.uid) {
+      toast.error("Unable to edit listing");
+      navigate("/");
     }
-  },[auth.currentUser.uid,listing,navigate])
+  }, [auth.currentUser.uid, listing, navigate]);
 
-  useEffect(()=>{
-     setLoading(true)
-     async function fetchListing(){
-        const docRef = doc(db,"listings",params.listingId)
-        const docSnap =await getDoc(docRef)
-        if(docSnap.exists()){
+  useEffect(() => {
+    setLoading(true);
+    async function fetchListing() {
+      const docRef = doc(db, "listings", params.listingId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
         setListing(docSnap.data());
-        setFormData({...docSnap.data()})
-        setLoading(false)
-        }else{
-            navigate("/")
-            toast.error("Listing does not exists")
-        }
-
-     }
-     fetchListing();
-  },[navigate, params.listingId])
-
+        setFormData({ ...docSnap.data() });
+        setLoading(false);
+      } else {
+        navigate("/");
+        toast.error("Listing does not exists");
+      }
+    }
+    fetchListing();
+  }, [navigate, params.listingId]);
 
   const onChange = (e) => {
     let boolean = null;
@@ -201,8 +207,8 @@ export default function EditListing() {
     !formDataCopy.offer && delete formDataCopy.discountedPrice;
     delete formDataCopy.latitude;
     delete formDataCopy.longitude;
-    const docRef = doc(db, "listings", params.listingId)
-    await updateDoc(docRef,formDataCopy);
+    const docRef = doc(db, "listings", params.listingId);
+    await updateDoc(docRef, formDataCopy);
     setLoading(false);
     toast.success("Listing Edited");
     navigate(
