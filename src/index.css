@@ -7,15 +7,18 @@ body {
     background-color: rgb(240,243,244);
 }
 
-.swiper-button-next
-.swiper-button-prev{
-    color: #248386 
-
+/* .swiper-button-next:after
+.swiper-button-prev:after{
+    color: #681621 
     
-}
+} */
 
+:root {
+    --swiper-navigation-color: white;
+    --swiper-pagination-color:white;
+  }
 .swiper-pagination-progressbar .swiper-pagination-progressbar-fill{
-    background: #a8dadc !important
+    background: #585c5c !important
 } 
 
 

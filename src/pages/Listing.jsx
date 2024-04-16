@@ -61,7 +61,7 @@ export default function Listing() {
         pagination={{ type: "progressbar" }}
         effect="fade"
         modules={[EffectFade]}
-        autoplay={{ delay: 1000 }}
+        autoplay={{ delay: 3000 }}
       >
         {listing.imgUrls.map((url, index) => (
           <SwiperSlide key={index}>
@@ -74,12 +74,10 @@ export default function Listing() {
             ></div>
           </SwiperSlide>
         ))}
-         <SwiperSlide>Slide 2</SwiperSlide>
-      <SwiperSlide>Slide 3</SwiperSlide>
-      <SwiperSlide>Slide 4</SwiperSlide>
+  
       </Swiper>
       <div
-        className="fixed top-[14%] right-[3%] z-10 bg-white cursor-pointer border-2 border-gray-400 rounded-full w-12 h-12 flex justify-center items-center"
+        className="fixed top-[15%] right-[1%] z-10 bg-white cursor-pointer border-2 border-gray-400 rounded-full w-12 h-12 flex justify-center items-center"
         onClick={() => {
           navigator.clipboard.writeText(window.location.href);
           setShareLinkCopied(true);
