@@ -9,6 +9,7 @@ import Header from './components/Header';
 import CreateListing from './pages/CreateListing';
 import EditListing from './pages/EditListing';
 import Listing from './pages/Listing';
+import AllListings from './pages/AllListings';
 import Category from './pages/Category';
 import { ToastContainer, toast } from 'react-toastify';
 import PrivateRoute from './components/PrivateRoute';
@@ -31,6 +32,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/category/:categoryName/:listingId" element={<Listing />} />
+          <Route path="/all-listings" element={<AllListings/>} />
           <Route path="/offers" element={<Offers />} />
           <Route path="/category/:categoryName" element={<Category />} />
           <Route path="/create-listing" element={<PrivateRoute />}>

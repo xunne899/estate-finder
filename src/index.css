@@ -3,15 +3,58 @@
 @tailwind utilities;
 
 
-body {
-    background-color: rgb(240,243,244);
-}
 
+
+* {
+    font-family: "Raleway", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  body {
+    background-color: rgb(240,243,244);
+    margin: 0; height: 100%; 
+}
 /* .swiper-button-next:after
 .swiper-button-prev:after{
     color: #681621 
     
 } */
+
+#about{
+   
+    /* Full height */
+    height: 100vh;
+    position: relative;
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-width:100%;
+
+
+}
+
+  
+  
+#centerBox{
+    max-width: 500px;
+    min-height: 150px;
+    position: fixed;
+    top:15%;
+    right:2%;
+    padding:20px 20px 20px 20px;
+    z-index: 50;
+    text-shadow: 0 0  black;
+    background: rgba(255, 255, 255, 0.456);
+    box-shadow: 0 8px 32px 0 rgba(156, 157, 168, 0.499);
+    backdrop-filter: blur( 1px );
+    -webkit-backdrop-filter: blur( 1px );
+    border-radius: 3px;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+
 
 :root {
     --swiper-navigation-color: white;

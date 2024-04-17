@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   getAuth,
-  GoogleAuthProvider,
   onAuthStateChanged,
-  signInWithPopup,
 } from "firebase/auth";
 
 export default function Header() {
@@ -29,11 +27,12 @@ export default function Header() {
   return (
     <div className="bg-white border-t shadow-sm sticky top-0 z-40">
       <header className="flex justify-between items-center p-5 max-w-8xl mx-auto">
-        <div>
+        <div className="mr-3">
           <img
-            src="https://cdn.pgimgs.com/hive-ui/static/v0.1.3/logo/pg-horizontal.svg"
+            // src="https://cdn.pgimgs.com/hive-ui/static/v0.1.3/logo/pg-horizontal.svg"
+            src="images/estate.png"
             alt="logo"
-            className="h-5 cursor-pointer"
+            className="cursor-pointer w-auto h-auto sm:h-14  max-w-full"
             onClick={() => navigate("/")}
           />
         </div>
@@ -46,6 +45,14 @@ export default function Header() {
             >
               Home
             </li>
+            <li
+              className={`py-3 text-sm font-semibold text-gray-400 border-b-[3px] border-transparent cursor-pointer
+              ${MatchRoute("/all-listings") && "text-stone-900 border-b-red-600"}`}
+              onClick={() => navigate("/all-listings")}
+            >
+              Listings
+            </li>
+
             <li
               className={`py-3 text-sm font-semibold text-gray-400 border-b-[3px] border-transparent cursor-pointer
               ${MatchRoute("/offers") && "text-stone-900 border-b-red-600"}`}
@@ -65,48 +72,6 @@ export default function Header() {
               {pageState}
             </li>
 
-            {/* added avatar */}
-            
-
-            {/* <div className="relative inline-block text-left mt-2">
-              <div className="group">
-              <button type="button"
-            class="inline-flex justify-center items-center w-full px-3 py-2 text-sm font-medium text-white bg-gray-300 hover:bg-gray-400 focus:outline-none focus:bg-gray-400 rounded-full">
-                  <span className="font-medium text-gray-600">
-                    JL
-                  </span>
-                  </button>
-
-                <div className="absolute left-0 w-40 mt-1 z-50 origin-top-left bg-white divide-y divide-gray-100 rounded-md shadow-lg opacity-0 group-hover:opacity-100 group-hover:visible transition duration-900 invisible ">
-                  <div className="py-1">
-                    <a
-                      href="#"
-                      className={`block px-4 py-2 text-sm text-gray-700 ${
-                        (MatchRoute("/log-in") || MatchRoute("/profile")) &&
-                        " hover:bg-gray-100"
-                      }`}
-                      onClick={() => navigate("/profile")}
-                    >
-                        {pageState}
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      Option 2
-                    </a>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      Option 3
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div> */}
-
-            {/* avatar end */}
             <button className="bg-red-500 hover:bg-red-600  font-bold px-6 rounded-full">
               <li
                 className={`py-3 text-sm font-semibold text-gray-800 border-b-[3px]  border-transparent cursor-pointer

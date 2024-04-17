@@ -46,12 +46,12 @@ export default function Slider() {
     listings && (
       <>
         <Swiper
+          // navigation
           slidesPerView={1}
-          navigation
           pagination={{ type: "progressbar" }}
-          effect="fade"
+          effect="slide"
           modules={[EffectFade]}
-          autoplay={{ delay: 3000 }}
+          autoplay={{ delay: 4500 }}
         >
           {listings.map(({ data, id }) => (
             <SwiperSlide
@@ -63,18 +63,30 @@ export default function Slider() {
                   background: `url(${data.imgUrls[0]}) center, no-repeat`,
                   backgroundSize: "cover",
                 }}
-                className="relative w-full h-[300px] overflow-hidden"
-              ></div>
-              <p className="text-[#f1faee] absolute left-1 top-3 font-medium max-w-[90%] bg-[#457b9d] shadow-lg opacity-90 p-2 rounded-br-3xl">
-                {data.name}
-              </p>
-              <p className="text-[#f1faee] absolute left-1 bottom-1 font-semibold max-w-[90%] bg-[#e63946] shadow-lg opacity-90 p-2 rounded-tr-3xl">
-                ${data.discountedPrice ?? data.regularPrice}
-                {data.type === "rent" && " / month"}
-              </p>
+                className="relative w-full h-[72vh] overflow-hidden"
+              >
+                {/* introbox */}
+
+              </div>
+
+              
             </SwiperSlide>
           ))}
+
+          
         </Swiper>
+        
+        <div  id="centerBox" className="flex justify-center items-center">
+        <h3 >The most trusted estate search agent !</h3>
+        </div>
+        
+        <div>
+        <div className="flex justify-center items-center p-1 h-32  space-x-4" >
+
+    <a href="https://github.com/xunne899" target="_blank" ><i class="fa-brands fa-square-github fa-2x"></i></a> <a href="https://www.facebook.com/" target="_blank"><i className="fab fa-facebook fa-2x"></i></a> <a href="https://www.instagram.com/" target="_blank" ><i class="fa-brands fa-instagram fa-2x"></i></a>  <a href="https://www.linkedin.com/in/yi-xun-t-16840537/" target="_blank" ><i class="fa-brands fa-linkedin fa-2x"></i></a>
+    </div>
+  
+        </div>
       </>
     )
   );
