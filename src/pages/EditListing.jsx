@@ -216,9 +216,11 @@ export default function EditListing() {
     );
   }
 
-  if (loading) {
-    return <Spinner />;
-  }
+  // if (loading) {
+  //   return <Spinner/>;
+  // }
+  if (loading) return <Spinner />;
+
   return (
     <main className="max-w-md px-2 mx-auto">
       <h1 className="text-3xl text-center mt-6 font-bold">Edit Listing</h1>
