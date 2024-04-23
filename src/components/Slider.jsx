@@ -62,7 +62,7 @@ export default function Slider() {
                   background: `url(${data.imgUrls[0]}) center, no-repeat`,
                   backgroundSize: "cover",
                 }}
-                className="relative w-full h-[72vh] overflow-hidden"
+                className="relative w-full h-[68vh] overflow-hidden"
               >
                 {/* introbox */}
 
@@ -78,11 +78,15 @@ export default function Slider() {
         </div>
         
         <div>
-        <div className="flex justify-center items-center p-1 h-32 space-x-4" >
+        <div className="flex justify-center items-center h-32 space-x-4" >
 
     <a href="https://github.com/xunne899" target="_blank" ><i class="fa-brands fa-square-github fa-2x"></i></a> <a href="https://www.facebook.com/" target="_blank"><i className="fab fa-facebook fa-2x"></i></a> <a href="https://www.instagram.com/" target="_blank" ><i class="fa-brands fa-instagram fa-2x"></i></a>  <a href="https://www.linkedin.com/in/yi-xun-t-16840537/" target="_blank" ><i class="fa-brands fa-linkedin fa-2x"></i></a>
     </div>
-  
+    <div className="flex justify-center align-middle m-2">
+  <p>
+  @2024 For Educational Purpose Only
+  </p>
+  </div>
         </div>
       </>
     )
